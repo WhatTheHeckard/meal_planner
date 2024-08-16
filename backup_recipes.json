@@ -1,0 +1,20 @@
+{
+    "pancakes": {
+        "recipe_type": "['Breakfast']",
+        "diet": "['N/A']",
+        "rating": "3",
+        "servings": "2",
+        "ingredients": "['krusteaz']",
+        "instructions": "1. Mix water with batter\n2. Heat the pan and pour the water\n3. Cook the pancake and serve",
+        "notes": "N/A"
+    },
+    "curry": {
+        "recipe_type": "['Dinner']",
+        "diet": "['N/A']",
+        "rating": "4",
+        "servings": "6",
+        "ingredients": "['Curry Powder', 'Chicken', 'Coconut Milk']",
+        "instructions": "1. Cook chicken\n2. Add curry powder and cook for an additional 3 minutes\n3. Add coconut milk and simmer for 20 minutes",
+        "notes": "N/A"
+    }
+}

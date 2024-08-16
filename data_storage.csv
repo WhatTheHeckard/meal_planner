@@ -1,0 +1,4 @@
+Meal_Name,Meal_Type,Diet,Rating,Servings,Ingredients,Instructions,Notes
+curry,dinner,N/A,4,6,"['chicken', 'curry paste']","['Do something', 'do nothing']",['No additional Notes']
+granola,snack,N/A,3,2,"['nuts', 'honey', 'the goods']","['Do something', 'do nothing']",['No additional Notes']
+pancake,breakfast,N/A,2,1,['krusteaz'],"['Do something', 'do nothing']",['No additional Notes']
