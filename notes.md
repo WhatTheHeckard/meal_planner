@@ -1,0 +1,1 @@
+> Note: To use tkinter in linux, I had to run `sudo apt install python3-tk`

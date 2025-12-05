@@ -1,13 +1,20 @@
 import json
 import os.path
-from typing import List
 
 #filename = "recipes.json"
 
 
+# CONSIDER MAKING THIS A DATACLASS
 class Recipe:
-    def __init__(self, recipe_name="N/A", recipe_type=[], diet=[], rating=0,
-                 servings=0, ingredients=[], instructions="N/A", notes="N/A"):
+    def __init__(self,
+                 recipe_name : str="N/A",
+                 recipe_type : list[str]=[],
+                 diet : list[str]=[],
+                 rating : int=0,
+                 servings : int=0,
+                 ingredients : list[str]=[],
+                 instructions : str="N/A",
+                 notes : str="N/A"):
         """Initialize an object of class Meal.
         Arguments:
             recipe_name: Meal name as a string. Default is 'N/A'
@@ -33,7 +40,7 @@ class Recipe:
         self.instructions = instructions
         self.notes = notes
 
-    def recipe_to_json(self):
+    def to_dict(self) -> dict:
         return {
             f"{self.recipe_name}": {
                 "recipe_type": f"{self.recipe_type}",
@@ -45,17 +52,29 @@ class Recipe:
                 "notes": f"{self.notes}"
             }
         }
+    
+    def __str__(self) -> str:
+        ret_str = f"Recipe Name: {self.recipe_name}\n"
+        ret_str += f"Recipe Type: {', '.join(self.recipe_type)}\n"
+        ret_str += f"Diet: {', '.join(self.diet)}\n"
+        ret_str += f"Rating: {self.rating}\n"
+        ret_str += f"Servings: {self.servings}\n"
+        ret_str += f"Ingredients: {', '.join(self.ingredients)}\n"
+        ret_str += f"Instructions: {self.instructions}\n"
+        ret_str += f"Notes: {self.notes}\n"
+        return ret_str
 
 
-class Recipe_Book:
+class RecipeBook:
     def __init__(self, filename):
-        self.filename = filename
-        self.recipe_list = self.load_recipe_list()
+        self.filename : str = filename
+        self.recipe_list : list[Recipe] = self.load_recipe_list()
 
-    def add_recipe(self, new_recipe: Recipe):
+    def add_recipe(self, new_recipe: Recipe) -> 'RecipeBook':
         self.recipe_list.append(new_recipe)
+        return self
 
-    def remove_recipe(self, recipe_name=""):
+    def remove_recipe(self, recipe_name="") -> 'RecipeBook':
         if (recipe_name == ""):
             # Should send some sort of error because there is no recipe
             # to remove.
@@ -65,28 +84,31 @@ class Recipe_Book:
                 if (self.recipe_list[recipe_itr].recipe_name == recipe_name):
                     self.recipe_list.remove(recipe_itr)
                     break
+        return self
 
-    def overwrite_recipe(self, new_recipe: Recipe):
+    def overwrite_recipe(self, new_recipe: Recipe) -> 'RecipeBook':
         for item in self.recipe_list:
             if item.recipe_name == new_recipe.recipe_name:
                 self.recipe_list[item] = new_recipe
-                return
+                return self
 
-    def print_list(self):
+    def print_list(self) -> 'RecipeBook':
         for recipe_itr in self.recipe_list:
-            print(recipe_itr.recipe_to_json())
+            print(recipe_itr.to_dict())
+        return self
 
-    def dump_recipe_list(self):
+    def dump_recipe_list(self) -> 'RecipeBook':
         """Print Recipe book to json file"""
         recipe_list = {}
         for recipe_itr in self.recipe_list:
-            recipe_list.update(recipe_itr.recipe_to_json())
+            recipe_list.update(recipe_itr.to_dict())
         with open(self.filename, "w") as fd:
             json.dump(recipe_list, fd, indent=4)
             fd.close()
+        return self
 
-    def load_recipe_list(self):
-        # If the file does not exist, return empty Recipe_Book
+    def load_recipe_list(self) -> list[Recipe]:
+        # If the file does not exist, return empty RecipeBook
         if (not os.path.isfile(self.filename)):
             return 0
         recipe_list = []
@@ -99,21 +121,28 @@ class Recipe_Book:
             recipe_list.append(read_recipe)
         return recipe_list
 
-    def search_meal_type(meal_type, self) -> List[Recipe]:
+    def search_meal_type(self, recipe_type) -> list[Recipe]:
         ret_list = []
         for item in self.recipe_list:
-            if item.meal_type == meal_type:
+            if item.recipe_type == recipe_type:
                 ret_list.append(item)
         return ret_list
 
-    def search_ingredients(ingredient, self) -> List[Recipe]:
+    def search_ingredients(self, ingredient) -> list[Recipe]:
         ret_list = []
         for item in self.recipe_list:
             if ingredient in item.ingredients:
                 ret_list.append(item)
         return ret_list
+    
+    def search_recipe_name(self, name) -> list[Recipe]:
+        ret_list = []
+        for item in self.recipe_list:
+            if name.lower() in item.recipe_name.lower():
+                ret_list.append(item)
+        return ret_list
 
 
 if __name__ == "__main__":
-    read_list = Recipe_Book("recipes.json")
+    read_list = RecipeBook("recipes.json")
     read_list.print_list()
